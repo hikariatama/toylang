@@ -1,0 +1,63 @@
+namespace ToyLang.Wasm;
+
+public enum WasmOpcode : byte
+{
+    Block = 0x02,                     // block
+    Loop = 0x03,                      // loop
+    If = 0x04,                        // if
+    Else = 0x05,                      // else
+    End = 0x0B,                       // throw
+    Branch = 0x0C,                    // br
+    BranchIf = 0x0D,                  // br_if
+    Return = 0x0F,                    // return
+    CallFunction = 0x10,              // call
+    CallIndirect = 0x11,              // call_indirect
+    DropValue = 0x1A,                 // drop
+    GetLocal = 0x20,                  // local.get
+    SetLocal = 0x21,                  // local.set
+    LoadInt32 = 0x28,                 // i32.load
+    LoadFloat64 = 0x2B,               // f64.load
+    LoadInt328Signed = 0x2C,          // i32.load8_s
+    LoadInt328Unsigned = 0x2D,        // i32.load8_u
+    StoreInt32 = 0x36,                // i32.store
+    StoreFloat64 = 0x39,              // f64.store
+    StoreInt328 = 0x3A,               // i32.store8
+    MemorySize = 0x3F,                // memory.size
+    MemoryGrow = 0x40,                // memory.grow
+    ConstInt32 = 0x41,                // i32.const
+    ConstFloat64 = 0x44,              // f64.const
+    EqualZeroInt32 = 0x45,            // i32.eqz
+    EqualInt32 = 0x46,                // i32.eq
+    NotEqualInt32 = 0x47,             // i32.ne
+    LessThanInt32 = 0x48,             // i32.lt_s
+    GreaterThanInt32 = 0x4A,          // i32.gt_s
+    LessEqualInt32 = 0x4C,            // i32.le_s
+    GreaterEqualInt32 = 0x4E,         // i32.ge_s
+    EqualFloat64 = 0x61,              // f64.eq
+    NotEqualFloat64 = 0x62,           // f64.ne
+    LessThanFloat64 = 0x63,           // f64.lt
+    GreaterThanFloat64 = 0x64,        // f64.gt
+    LessEqualFloat64 = 0x65,          // f64.le
+    GreaterEqualFloat64 = 0x66,       // f64.ge
+    FloorFloat64 = 0x9C,              // f64.floor
+    TruncateFloat64 = 0x9D,           // f64.trunc
+    AddFloat64 = 0xA0,                // f64.add
+    SubtractFloat64 = 0xA1,           // f64.sub
+    MultiplyFloat64 = 0xA2,           // f64.mul
+    DivideFloat64 = 0xA3,             // f64.div
+    AddInt32 = 0x6A,                  // i32.add
+    SubtractInt32 = 0x6B,             // i32.sub
+    MultiplyInt32 = 0x6C,             // i32.mul
+    DivideInt32 = 0x6D,               // i32.div_s
+    RemainderInt32 = 0x6F,            // i32.rem_s
+    AndInt32 = 0x71,                  // i32.and
+    OrInt32 = 0x72,                   // i32.or
+    XorInt32 = 0x73,                  // i32.xor
+    ConvertFloat64ToInt32 = 0xAA,     // i32.trunc_f64_s
+    ConvertInt32ToFloat64 = 0xB7,     // f64.convert_i32_s
+    MemoryCopy = 0xFC,
+    LessThanUInt32 = 0x49,            // i32.lt_u
+    GreaterThanUInt32 = 0x4B,         // i32.gt_u
+    LessEqualUInt32 = 0x4D,           // i32.le_u
+    GreaterEqualUInt32 = 0x4F,        // i32.ge_u
+}

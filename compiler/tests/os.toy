@@ -1,0 +1,488 @@
+class FileSystem is
+    var files : Map[String, String]()
+    var listing : Map[String, String]()
+    var directoryUsage : Map[String, String]()
+    var cwd : "/home/strigoi"
+    var diskSummary : "Filesystem      Size Used Avail Use%\n/dev/micro       64G  21G   43G  33%\n/dev/loop0      512M 128M  384M  25%\ntmpfs             8G  96M  7.9G   2%"
+    var release : "NAME=WASMOS\nVERSION=0.7 Neptune\nID=wasmos"
+    var motd : ""
+
+    method GetParent(path: String): String is
+        if path.Equal("/") then
+            return "/"
+        end
+        var lastSlash := path.LastIndexOf("/")
+        if lastSlash.Equal(0) then
+            return "/"
+        end
+        return path.Slice(0, lastSlash)
+    end
+
+    method GetName(path: String): String is
+        var lastSlash := path.LastIndexOf("/")
+        return path.Slice(lastSlash.Plus(1), path.Length().Minus(lastSlash).Minus(1))
+    end
+
+    method ResolvePath(path: String): String is
+        var target : String
+        if path.StartsWith("~/") then
+            target := this.Combine("/home/strigoi", path.Slice(2))
+        elif path.StartsWith("/") then
+            target := path
+        else
+            target := this.Combine(this.cwd, path)
+        end
+
+        var parts := target.Split("/")
+        var resolvedParts := List[String]()
+        var i := 0
+        while i.LessThan(parts.Length()) loop
+            var part := parts.get(i)
+            if part.Equal("..") then
+                if resolvedParts.Length().GreaterThan(0) then
+                    resolvedParts.pop(resolvedParts.Length().Minus(1))
+                end
+            else
+                if part.NotEqual("").And(part.NotEqual(".")) then
+                    resolvedParts.append(part)
+                end
+            end
+            i := i.Plus(1)
+        end
+
+        if resolvedParts.Length().Equal(0) then
+            return "/"
+        end
+
+        return "/".Concat("/".Join(resolvedParts))
+    end
+
+    method EnsureDir(path: String) is
+        if this.listing.Contains(path) then
+            return
+        end
+        this.listing.set(path, "")
+        this.directoryUsage.set(path, "")
+        var parent := this.GetParent(path)
+        var name := this.GetName(path)
+        if parent.NotEqual(path) then
+            this.EnsureDir(parent)
+            this.AddEntry(parent, name)
+        end
+    end
+
+    method Cd(path: String): Boolean is
+        var target := this.ResolvePath(path)
+        if this.listing.Contains(target) then
+            this.cwd := target
+            return Boolean(true)
+        end
+        return Boolean(false)
+    end
+
+    method AddEntry(dir: String, name: String) is
+        if this.listing.Contains(dir) then
+            var old := this.listing.get(dir)
+            if old.Equal("") then
+                this.listing.set(dir, name)
+            else
+                this.listing.set(dir, old.Concat(" ").Concat(name))
+            end
+        else
+            this.listing.set(dir, name)
+        end
+    end
+
+    method Combine(left: String, right: String): String is
+        if left.Equal("/") then
+            return "/".Concat(right)
+        end
+        return left.Concat("/").Concat(right)
+    end
+
+    method AddFile(path: String, content: String) is
+        var fullPath := this.ResolvePath(path)
+        var dir := this.GetParent(fullPath)
+        var name := this.GetName(fullPath)
+        this.EnsureDir(dir)
+        this.files.set(fullPath, content)
+        this.AddEntry(dir, name)
+    end
+
+    method ReadFile(path: String): String is
+        var fullPath := this.ResolvePath(path)
+        if this.files.Contains(fullPath) then
+            return this.files.get(fullPath)
+        end
+        return "cat: ".Concat(path).Concat(": No such file")
+    end
+
+    method ListDirectory(path: String): String is
+        var fullPath := this.ResolvePath(path)
+        if this.listing.Contains(fullPath) then
+            return this.listing.get(fullPath)
+        end
+        return "ls: cannot access '".Concat(path).Concat("': No such directory")
+    end
+
+    method HasDirectory(path: String): Boolean is
+        var fullPath := this.ResolvePath(path)
+        return this.listing.Contains(fullPath)
+    end
+
+    method Touch(path: String, content: String) is
+        this.AddFile(path, content)
+    end
+
+    method DirectoryUsage(path: String): String is
+        var fullPath := this.ResolvePath(path)
+        if this.directoryUsage.Contains(fullPath) then
+            return this.directoryUsage.get(fullPath)
+        end
+        return "du: cannot access '".Concat(path).Concat("': No such file or directory")
+    end
+
+    method DiskSummary(): String is
+        return this.diskSummary
+    end
+
+    method GetRelease(): String is
+        return this.release
+    end
+
+    method Seed() is
+        this.AddFile("/etc/motd", this.motd)
+        this.AddFile("/etc/os-release", this.release)
+        this.AddFile("/home/strigoi/notes/todo.txt", "- fix scheduler\n- review wasm backend\n- ship nightly build")
+        this.AddFile("/home/strigoi/projects/netstack.md", "# NetStack\n- sockets\n- diagnostics")
+        this.EnsureDir("/var")
+        this.EnsureDir("/tmp")
+        this.EnsureDir("/usr/bin")
+
+        this.directoryUsage.set("/", "12K   /etc\n48K   /home\n8K    /var\n4K    /tmp\n92M   /usr")
+        this.directoryUsage.set("/home/strigoi", "28K   /home/strigoi/notes\n12K   /home/strigoi/projects\n4K    /home/strigoi/.config")
+        this.directoryUsage.set("/etc", "4K    /etc/motd\n8K    /etc/os-release")
+        this.directoryUsage.set("/tmp", "")
+    end
+end
+
+class NetworkCard is
+    var hostname : "wasm-os.local"
+    var mac : "02:42:ac:11:00:2a"
+    var ip : "10.42.0.23"
+    var gateway : "10.42.0.1"
+
+    method Hostname(): String is
+        return this.hostname
+    end
+
+    method LocalIp(): String is
+        return this.ip
+    end
+
+    method MacAddress(): String is
+        return this.mac
+    end
+
+    method Gateway(): String is
+        return this.gateway
+    end
+
+    method Fetch(ip: String): String is
+        if ip.Equal("10.42.0.10") then
+            return "{ \"status\": \"ok\", \"headline\": \"WASM-OS stable release deployed\" }"
+        end
+        if ip.Equal("10.42.0.11") then
+            return "{ \"api\": \"v1\", \"message\": \"hello from wasm-api\" }"
+        end
+        return "HTTP/1.1 404 Not Found\n\n404: host unreachable"
+    end
+end
+
+
+class DnsServer is
+    var entries : Map[String, String]()
+
+    method Seed() is
+        this.entries.set("news.local", "10.42.0.10")
+        this.entries.set("api.local", "10.42.0.11")
+        this.entries.set("update.local", "10.42.0.12")
+    end
+
+    method Resolve(hostname: String): String is
+        if this.entries.Contains(hostname) then
+            return this.entries.get(hostname)
+        end
+        return "0.0.0.0"
+    end
+end
+
+class Shell is
+    var fs : FileSystem()
+    var net : NetworkCard()
+    var dns : DnsServer()
+    var user : "strigoi"
+    var host : "wasm-os.local"
+    var historyLog : ""
+    var shellName : "sh"
+    var kernel : "6.1.24-wasm"
+    var uptime : "up 42 days, 03:18"
+    var packages : "421"
+    var shellVersion : "0.7"
+
+    method Remember(command: String) is
+        if this.historyLog.Equal("") then
+            this.historyLog := command
+        else
+            this.historyLog := this.historyLog.Concat("\n").Concat(command)
+        end
+    end
+
+    method BuildPrompt(): String is
+        var cwd : String
+        if this.fs.cwd.StartsWith("/home/".Concat(this.user)) then
+            cwd := "~".Concat(this.fs.cwd.Slice("/home/".Concat(this.user).Length()))
+        else
+            cwd := this.fs.cwd
+        end
+        return "\x1b[38;2;175;95;255m".Concat(this.user).Concat("\x1b[0m in \x1b[38;2;133;252;0m").Concat(cwd).Concat("\x1b[0m").Concat("\x1b[38;2;215;95;2m $ \x1b[0m")
+    end
+
+    method ExecuteCommand(input: String): Boolean is
+        this.Remember(input)
+        var tokens := input.Split(" ")
+        if tokens.Length().Equal(0) then
+            return Boolean(true)
+        end
+        var command := tokens.get(0)
+
+        if command.Equal("exit") then
+            IO.PrintLine("Session closed.")
+            return Boolean(false)
+        end
+
+        if command.Equal("help") then
+            IO.PrintLine("Builtins: cd, ls, cat, echo, touch, pwd, neofetch, curl, ifconfig, df, du, env, whoami, uptime, top, ps, history, help, exit")
+            return Boolean(true)
+        end
+
+        if command.Equal("pwd") then
+            IO.PrintLine(this.fs.cwd)
+            return Boolean(true)
+        end
+
+        if command.Equal("ls") then
+            var longFlag := Boolean(false)
+            var target := "."
+            var i := 1
+            while i.LessThan(tokens.Length()) loop
+                var arg := tokens.get(i)
+                if arg.Equal("-l") then
+                    longFlag := Boolean(true)
+                else
+                    target := arg
+                end
+                i := i.Plus(1)
+            end
+            if longFlag.Equal(Boolean(true)) then
+                IO.PrintLine(this.fs.DirectoryUsage(target))
+            else
+                IO.PrintLine(this.fs.ListDirectory(target))
+            end
+            return Boolean(true)
+        end
+
+        if command.Equal("cd") then
+            if tokens.Length().LessThan(2) then
+                IO.PrintLine("\x1b[31mcd: missing path\x1b[0m")
+            else
+                var destination := tokens.get(1)
+                if this.fs.Cd(destination).Not() then
+                    IO.PrintLine("\x1b[31mcd: no such file or directory: ".Concat(destination).Concat("\x1b[0m"))
+                end
+            end
+            return Boolean(true)
+        end
+
+        if command.Equal("cat") then
+            if tokens.Length().LessThan(2) then
+                IO.PrintLine("\x1b[31mcat: missing operand\x1b[0m")
+            else
+                IO.PrintLine(this.fs.ReadFile(tokens.get(1)))
+            end
+            return Boolean(true)
+        end
+
+        if command.Equal("echo") then
+            var msg := ""
+            var g := 1
+            while g.LessThan(tokens.Length()) loop
+                if g.GreaterThan(1) then msg := msg.Concat(" ") end
+                msg := msg.Concat(tokens.get(g))
+                g := g.Plus(1)
+            end
+            IO.PrintLine(msg)
+            return Boolean(true)
+        end
+
+        if command.Equal("touch") then
+            if tokens.Length().LessThan(2) then
+                IO.PrintLine("\x1b[31mtouch: missing file name\x1b[0m")
+            else
+                var path := tokens.get(1)
+                var content := ""
+                if tokens.Length().GreaterThan(2) then
+                    var k := 2
+                    while k.LessThan(tokens.Length()) loop
+                        if k.GreaterThan(2) then content := content.Concat(" ") end
+                        content := content.Concat(tokens.get(k))
+                        k := k.Plus(1)
+                    end
+                end
+                this.fs.Touch(path, content)
+                IO.PrintLine("Created ".Concat(this.fs.ResolvePath(path)))
+            end
+            return Boolean(true)
+        end
+
+
+        if command.Equal("neofetch") then
+            IO.PrintLine("\x1b[35m                        _\x1b[0m     \x1b[38;2;79;247;122m".Concat(this.user).Concat("\x1b[0m@\x1b[38;2;79;247;122m").Concat(this.host))
+            var parts : List[String]()
+            var partN : Integer(0)
+            while partN.LessThan(this.user.Length().Plus(1).Plus(this.host.Length())) loop
+                parts.append("-")
+                partN := partN.Plus(Integer(1))
+            end
+            IO.PrintLine("\x1b[35m                       | \\\x1b[0m    ".Concat("".Join(parts)))
+            IO.PrintLine("\x1b[35m                       | |\x1b[0m    \x1b[38;2;241;250;140mOS\x1b[0m: WASM-OS")
+            IO.PrintLine("\x1b[35m                       | |\x1b[0m    \x1b[38;2;241;250;140mHost\x1b[0m: ".Concat(this.net.Hostname()))
+            IO.PrintLine("\x1b[35m  |\\                   | |\x1b[0m    \x1b[38;2;241;250;140mKernel\x1b[0m: ".Concat(this.kernel))
+            IO.PrintLine("\x1b[35m /, ~\\                / /\x1b[0m     \x1b[38;2;241;250;140mUptime\x1b[0m: ".Concat(this.uptime))
+            IO.PrintLine("\x1b[35mX     `-.....-------./ /\x1b[0m      \x1b[38;2;241;250;140mPackages\x1b[0m: ".Concat(this.packages))
+            IO.PrintLine("\x1b[35m ~-. ~  ~              |\x1b[0m      \x1b[38;2;241;250;140mShell\x1b[0m: ".Concat(this.shellName).Concat(" ").Concat(this.shellVersion))
+            IO.PrintLine("\x1b[35m    \\             /    |\x1b[0m      \x1b[38;2;241;250;140mCPU\x1b[0m: MicroChip v1.0")
+            IO.PrintLine("\x1b[35m     \\  /_     ___\\   /\x1b[0m       \x1b[38;2;241;250;140mMemory\x1b[0m: 256MB / 1024MB")
+            IO.PrintLine("\x1b[35m     | /\\ ~~~~~   \\ |\x1b[0m         \x1b[38;2;241;250;140mDE\x1b[0m: Aqua")
+            IO.PrintLine("\x1b[35m     | | \\        || |\x1b[0m")
+            IO.PrintLine("\x1b[35m     | |\\ \\       || )\x1b[0m")
+            IO.PrintLine("\x1b[35m    (_/ (_/      ((_/\x1b[0m")
+            IO.PrintLine()
+            IO.PrintLine()
+            IO.PrintLine()
+            return Boolean(true)
+        end
+
+        if command.Equal("ifconfig") then
+            IO.PrintLine("eth0      Link encap:Ethernet  HWaddr ".Concat(this.net.MacAddress()))
+            IO.PrintLine("          inet addr:".Concat(this.net.LocalIp()).Concat("  Bcast:10.42.0.255  Mask:255.255.255.0"))
+            IO.PrintLine("          gateway ".Concat(this.net.Gateway()))
+            IO.PrintLine("          RX packets 102422  TX packets 99812")
+            return Boolean(true)
+        end
+
+        if command.Equal("df") then
+            IO.PrintLine(this.fs.DiskSummary())
+            return Boolean(true)
+        end
+
+        if command.Equal("du") then
+            var duTarget := "."
+            if tokens.Length().GreaterThan(1) then
+                duTarget := tokens.get(1)
+            end
+            IO.PrintLine(this.fs.DirectoryUsage(duTarget))
+            return Boolean(true)
+        end
+
+        if command.Equal("curl") then
+            if tokens.Length().LessThan(2) then
+                IO.PrintLine("\x1b[31mcurl: missing host\x1b[0m")
+            else
+                var hostname := tokens.get(1)
+                var ip := this.dns.Resolve(hostname)
+                if ip.Equal("0.0.0.0") then
+                    IO.PrintLine("curl: (6) Could not resolve host: ".Concat(hostname))
+                else
+                    IO.PrintLine("Resolving ".Concat(hostname).Concat(" -> ").Concat(ip))
+                    IO.PrintLine("Fetching from network interface...")
+                    IO.PrintLine(this.net.Fetch(ip))
+                end
+            end
+            return Boolean(true)
+        end
+
+        if command.Equal("env") then
+            IO.PrintLine("USER=".Concat(this.user))
+            IO.PrintLine("HOSTNAME=".Concat(this.host))
+            IO.PrintLine("SHELL=/bin/".Concat(this.shellName))
+            IO.PrintLine("EDITOR=edit")
+            IO.PrintLine("PATH=/usr/bin:/usr/local/bin:/bin")
+            return Boolean(true)
+        end
+
+        if command.Equal("whoami") then
+            IO.PrintLine(this.user)
+            return Boolean(true)
+        end
+
+        if command.Equal("uptime") then
+            IO.PrintLine(" 10:17:04 ".Concat(this.uptime).Concat(",  load average: 0.24, 0.31, 0.11"))
+            return Boolean(true)
+        end
+
+        if command.Equal("top") then
+            IO.PrintLine("PID   USER     CPU%   MEM%  COMMAND")
+            IO.PrintLine("1     root     0.3    0.2   init")
+            IO.PrintLine("42    micro    1.7    1.3   sh")
+            IO.PrintLine("87    micro    0.6    0.9   wasm-runtime")
+            return Boolean(true)
+        end
+
+        if command.Equal("ps") then
+            IO.PrintLine("USER   PID  %CPU %MEM COMMAND")
+            IO.PrintLine("root     1  0.3  0.2 /sbin/init")
+            IO.PrintLine("micro   42  1.7  1.3 /bin/sh")
+            IO.PrintLine("micro   87  0.6  0.9 wasm-runtime --jit")
+            return Boolean(true)
+        end
+
+        if command.Equal("history") then
+            if this.historyLog.Equal("") then
+                IO.PrintLine("(history empty)")
+            else
+                IO.PrintLine(this.historyLog)
+            end
+            return Boolean(true)
+        end
+
+        IO.PrintLine("\x1b[31msh: unknown command '".Concat(command).Concat("'").Concat("\x1b[0m"))
+        return Boolean(true)
+    end
+
+    method RunInteractive() is
+        this.fs.Seed()
+        this.dns.Seed()
+        IO.PrintLine("The programs included with the WASM-OS system are free software;")
+        IO.PrintLine("the exact distribution terms for each program are described in the")
+        IO.PrintLine("individual files in /usr/share/doc/*/copyright.")
+        IO.PrintLine()
+        IO.PrintLine("WASM-OS comes with ABSOLUTELY NO WARRANTY, to the extent")
+        IO.PrintLine("permitted by applicable law.")
+        IO.PrintLine()
+        var running := Boolean(true)
+        while running.Equal(Boolean(true)) loop
+            IO.Print(this.BuildPrompt())
+            var input := IO.ReadLine()
+            if input.NotEqual("") then
+                running := this.ExecuteCommand(input)
+            end
+        end
+    end
+end
+
+
+method Main is
+    var shell := Shell()
+    shell.RunInteractive()
+end

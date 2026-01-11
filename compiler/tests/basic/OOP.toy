@@ -1,0 +1,41 @@
+class A is
+    method meow() is
+        IO.PrintLine("Meow!")
+    end
+end
+
+class B extends A is
+    method bark() is
+        IO.PrintLine("Bark!")
+    end
+end
+
+class C extends A is
+    method meow() is
+        IO.PrintLine("Angry meow }:[")
+    end
+end
+
+method Main is
+    var a : A
+    var b : B
+    var c : C
+    a := A()
+    b := B()
+    c := C()
+    a.meow()
+    b.meow()
+    b.bark()
+    c.meow()
+
+    var abc : Array[A](3)
+    abc[0] := A()
+    abc[1] := B()
+    abc[2] := C()
+
+    var i : Integer(0)
+    while i.LessThan(Integer(3)) loop
+        abc[i].meow()
+        i := i.Plus(Integer(1))
+    end
+end

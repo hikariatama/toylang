@@ -1,0 +1,37 @@
+method SumReals(left : Real, right : Real) : Real => left.Plus(right)
+
+method DescribeList(values : List[Integer]) : Integer => values.Length()
+
+method Main is
+    var baseInt : Integer(9)
+    var coercedReal : Real
+    coercedReal := baseInt.ToReal()
+    IO.PrintLine(coercedReal)
+
+    var mixedReal : Real
+    mixedReal := SumReals(coercedReal, 0.5)
+    IO.PrintLine(mixedReal)
+
+    var backToInt : Integer
+    backToInt := mixedReal.ToInteger()
+    IO.PrintLine(backToInt)
+
+    var boolVal : Boolean(true)
+    IO.PrintLine(boolVal.ToInteger())
+    IO.PrintLine(Integer(0).ToBoolean())
+
+    var intArray : Array[Integer](Integer(3))
+    intArray.set(0, 3)
+    intArray.set(1, 6)
+    intArray.set(2, 9)
+    var listFromArray : List[Integer]()
+    listFromArray := intArray.toList()
+    IO.PrintLine(listFromArray)
+    IO.PrintLine(DescribeList(listFromArray))
+
+    var baseList : List[Integer](2, 4, 6, 8)
+    var arrayFromList : Array[Integer](Integer(4))
+    arrayFromList := baseList.toArray()
+    IO.PrintLine(arrayFromList.get(0))
+    IO.PrintLine(arrayFromList.Length())
+end

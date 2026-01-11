@@ -1,0 +1,8 @@
+method Main is
+    var start := Time.PerfCounter()
+    Time.Sleep(0.05)
+    var finish := Time.PerfCounter()
+
+    IO.PrintLine(finish.GreaterThan(start))
+    IO.PrintLine(Time.Unix().GreaterThan(0.0))
+end

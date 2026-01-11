@@ -1,0 +1,168 @@
+method MatrixRainFrame(columns: Integer, rows: Integer, streamHead: List[Integer], streamLength: List[Integer], streamSpeed: List[Integer], streamDelay: List[Integer]) is
+    var chars := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+    IO.Print("\x1b[H")
+
+    var y := Integer(0)
+    while y.LessThan(rows) loop
+        var line := ""
+        var x := Integer(0)
+        while x.LessThan(columns) loop
+            var head := streamHead.get(x)
+            var length := streamLength.get(x)
+            var delay := streamDelay.get(x)
+
+            var draw := Boolean(false)
+            if delay.LessThan(Integer(1)) then
+                var tailStart := head.Minus(length)
+                if y.GreaterEqual(tailStart).And(head.GreaterEqual(y)) then
+                    draw := Boolean(true)
+                end
+            end
+
+            if draw then
+                var r := Math.Random()
+                var lenReal := Real(chars.Length())
+                r := r.Mult(lenReal)
+                var idx := Integer(r)
+                if idx.GreaterEqual(chars.Length()) then
+                    idx := chars.Length().Minus(Integer(1))
+                end
+
+                var ch := chars.Slice(idx, 1)
+
+                var colorCode := "\x1b[32m"
+                if y.Equal(head) then
+                    colorCode := "\x1b[97m"
+                end
+
+                var cell := colorCode.Concat(ch)
+                cell := cell.Concat("\x1b[0m")
+                line := line.Concat(cell)
+            else
+                line := line.Concat(" ")
+            end
+
+            x := x.Plus(Integer(1))
+        end
+        IO.PrintLine(line)
+        y := y.Plus(Integer(1))
+    end
+
+    var col := Integer(0)
+    while col.LessThan(columns) loop
+        var delay2 := streamDelay.get(col)
+        if delay2.GreaterThan(Integer(0)) then
+            delay2 := delay2.Minus(Integer(1))
+            streamDelay.set(col, delay2)
+        else
+            var head2 := streamHead.get(col)
+            var len2 := streamLength.get(col)
+            var speed := streamSpeed.get(col)
+
+            head2 := head2.Plus(speed)
+
+            var minLen := Integer(4)
+            if len2.GreaterThan(minLen) then
+                len2 := len2.Minus(Integer(1))
+            end
+
+            var resetThreshold := rows.Plus(Integer(10))
+            if head2.GreaterThan(resetThreshold).Or(len2.LessThan(Integer(1))) then
+                var minLen2 := Integer(20)
+                var maxLen2 := Integer(45)
+                var span := maxLen2.Minus(minLen2)
+                var spanReal := Real(span)
+                var randLen := Math.Random()
+                randLen := randLen.Mult(spanReal)
+                var lenOffset := Integer(randLen)
+                var newLen := minLen2.Plus(lenOffset)
+                streamLength.set(col, newLen)
+
+                var minDelay2 := Integer(5)
+                var maxDelay2 := Integer(60)
+                var delaySpan := maxDelay2.Minus(minDelay2)
+                var delaySpanReal := Real(delaySpan)
+                var randDelay := Math.Random()
+                randDelay := randDelay.Mult(delaySpanReal)
+                var delayOffset := Integer(randDelay)
+                var newDelay := minDelay2.Plus(delayOffset)
+                streamDelay.set(col, newDelay)
+
+                var minSpeed := Integer(1)
+                var maxSpeed := Integer(3)
+                var speedSpan := maxSpeed.Minus(minSpeed)
+                var speedSpanReal := Real(speedSpan)
+                var randSpeed := Math.Random()
+                randSpeed := randSpeed.Mult(speedSpanReal)
+                var speedOffset := Integer(randSpeed)
+                var newSpeed := minSpeed.Plus(speedOffset)
+                streamSpeed.set(col, newSpeed)
+
+                streamHead.set(col, Integer(0))
+            else
+                streamHead.set(col, head2)
+                streamLength.set(col, len2)
+            end
+        end
+
+        col := col.Plus(Integer(1))
+    end
+end
+
+method Main is
+    var wReal := Screen.Width
+    var hReal := Screen.Height
+    var columns := Integer(wReal)
+    var rows := Integer(hReal)
+
+    var streamHead := List[Integer]()
+    var streamLength := List[Integer]()
+    var streamSpeed := List[Integer]()
+    var streamDelay := List[Integer]()
+
+    var x := Integer(0)
+    while x.LessThan(columns) loop
+        var start := Integer(0)
+        streamHead.append(start)
+
+        var minLen := Integer(20)
+        var maxLen := Integer(45)
+        var span := maxLen.Minus(minLen)
+        var spanReal := Real(span)
+        var randLen := Math.Random()
+        randLen := randLen.Mult(spanReal)
+        var lenOffset := Integer(randLen)
+        var length := minLen.Plus(lenOffset)
+        streamLength.append(length)
+
+        var minSpeed := Integer(1)
+        var maxSpeed := Integer(3)
+        var speedSpan := maxSpeed.Minus(minSpeed)
+        var speedSpanReal := Real(speedSpan)
+        var randSpeed := Math.Random()
+        randSpeed := randSpeed.Mult(speedSpanReal)
+        var speedOffset := Integer(randSpeed)
+        var speed := minSpeed.Plus(speedOffset)
+        streamSpeed.append(speed)
+
+        var minDelay := Integer(0)
+        var maxDelay := Integer(60)
+        var delaySpan := maxDelay.Minus(minDelay)
+        var delaySpanReal := Real(delaySpan)
+        var randDelay := Math.Random()
+        randDelay := randDelay.Mult(delaySpanReal)
+        var delayOffset := Integer(randDelay)
+        var delay := minDelay.Plus(delayOffset)
+        streamDelay.append(delay)
+
+        x := x.Plus(Integer(1))
+    end
+
+    IO.Print("\x1b[2J\x1b[?25l")
+
+    while Boolean(true) loop
+        MatrixRainFrame(columns, rows, streamHead, streamLength, streamSpeed, streamDelay)
+        Time.Sleep(Real(0.05))
+    end
+end

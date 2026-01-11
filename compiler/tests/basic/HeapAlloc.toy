@@ -1,0 +1,149 @@
+method Main is
+    var a1 : List[Integer](1)
+    IO.PrintLine(a1)
+
+    var a2 : List[Integer](1, 2)
+    IO.PrintLine(a2)
+
+    var a3 : List[Integer](1, 2, 3)
+    IO.PrintLine(a3)
+
+    var a4 : List[Integer](1, 2, 3, 4)
+    IO.PrintLine(a4)
+
+    var a5 : List[Integer](1, 2, 3, 4, 5)
+    IO.PrintLine(a5)
+
+    var a6 : List[Integer](1, 2, 3, 4, 5, 6)
+    IO.PrintLine(a6)
+
+    var a7 : List[Integer](1, 2, 3, 4, 5, 6, 7)
+    IO.PrintLine(a7)
+
+    var a8 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8)
+    IO.PrintLine(a8)
+
+    var a9 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9)
+    IO.PrintLine(a9)
+
+    var a10 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    IO.PrintLine(a10)
+
+    var a11 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+    IO.PrintLine(a11)
+
+    var a12 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+    IO.PrintLine(a12)
+
+    var a13 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
+    IO.PrintLine(a13)
+
+    var a14 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
+    IO.PrintLine(a14)
+
+    var a15 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
+    IO.PrintLine(a15)
+
+    var a16 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+    IO.PrintLine(a16)
+
+    var a17 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)
+    IO.PrintLine(a17)
+
+    var a18 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)
+    IO.PrintLine(a18)
+
+    var a19 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
+    IO.PrintLine(a19)
+
+    var a20 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+    IO.PrintLine(a20)
+
+    var a21 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21)
+    IO.PrintLine(a21)
+
+    var a22 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22)
+    IO.PrintLine(a22)
+
+    var a23 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23)
+    IO.PrintLine(a23)
+
+    var a24 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24)
+    IO.PrintLine(a24)
+
+    var a25 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+    IO.PrintLine(a25)
+
+    var a26 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
+    IO.PrintLine(a26)
+
+    var a27 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27)
+    IO.PrintLine(a27)
+
+    var a28 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28)
+    IO.PrintLine(a28)
+
+    var a29 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29)
+    IO.PrintLine(a29)
+
+    var a30 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30)
+    IO.PrintLine(a30)
+
+    var a31 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31)
+    IO.PrintLine(a31)
+
+    var a32 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32)
+    IO.PrintLine(a32)
+
+    var a33 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33)
+    IO.PrintLine(a33)
+
+    var a34 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34)
+    IO.PrintLine(a34)
+
+    var a35 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35)
+    IO.PrintLine(a35)
+
+    var a36 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36)
+    IO.PrintLine(a36)
+
+    var a37 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37)
+    IO.PrintLine(a37)
+
+    var a38 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38)
+    IO.PrintLine(a38)
+
+    var a39 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39)
+    IO.PrintLine(a39)
+
+    var a40 : List[Integer](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40)
+    IO.PrintLine(a40)
+
+    var aHuge : List[Integer]()
+    var i : Integer(0)
+    while i.LessThan(65536) loop
+        aHuge.append(i)
+        i := i.Plus(1)
+    end
+    IO.PrintLine(aHuge.Length())
+
+    var aHugeDynamic : List[List[String]]()
+    var j : Integer(0)
+    // 1024 * 1024 * 16 = 16 777 216 bytes allocated
+    // default page size is 128 KB
+    // should produce memory grow opcodes
+    while j.LessThan(1024) loop
+        var innerList : List[String]()
+        var k : Integer(0)
+        while k.LessThan(1024) loop
+            innerList.append("Hello")
+            k := k.Plus(1)
+        end
+        aHugeDynamic.append(innerList)
+        j := j.Plus(1)
+    end
+    IO.PrintLine(aHugeDynamic.Length())
+    IO.PrintLine(aHugeDynamic.get(0).Length())
+    IO.PrintLine(aHugeDynamic.get(1023).Length())
+    IO.PrintLine(aHugeDynamic.get(512).get(512))
+end

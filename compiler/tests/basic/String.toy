@@ -1,0 +1,24 @@
+method Main is
+    var a : String
+    a := "Hello, world!"
+    IO.PrintLine(a.Split())
+    IO.PrintLine(a.Split(",").get(0))
+    IO.PrintLine(a.Split("l", 1))
+    IO.PrintLine("Goodbye,".Concat(a.Split(",").get(1)))
+    IO.PrintLine(a.Length)
+    IO.PrintLine("Beautiful".Concat(a.Slice(7, 5)))
+    IO.PrintLine("foo".Concat("bar"))
+    IO.PrintLine("foo".Concat("bar").Equal("foobar"))
+    IO.PrintLine(a.Slice(7).Concat("!!!"))
+    IO.PrintLine(a.LastIndexOf("l"))
+    IO.PrintLine(a.StartsWith("Hello"))
+    IO.PrintLine(a.EndsWith("world!"))
+    IO.PrintLine("foo".NotEqual("bar"))
+    IO.PrintLine("foo".NotEqual("foo"))
+    var tokens : List[String]("alpha", "beta", "gamma")
+    IO.PrintLine(", ".Join(tokens))
+    IO.PrintLine("-".Join(List[String]()))
+    IO.PrintLine(".".Join(a.Split(" ")))
+    IO.PrintLine("コ")
+    IO.PrintLine("亜京国語電話龍".Slice(2, 1))
+end

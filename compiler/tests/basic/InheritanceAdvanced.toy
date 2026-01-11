@@ -1,0 +1,92 @@
+class BaseGauge is
+    var baseValue : Integer(0)
+    var label : String("base")
+
+    this(seed : Integer) is
+        this.baseValue := seed
+    end
+
+    method Touch : Integer is
+        this.baseValue := this.baseValue.Plus(Integer(1))
+        return this.baseValue
+    end
+
+    method Touch(delta : Integer) : Integer is
+        this.baseValue := this.baseValue.Plus(delta)
+        return this.baseValue
+    end
+
+    method Describe : String => this.label
+end
+
+class MidGauge extends BaseGauge is
+    var extra : Integer(0)
+    var snapshots : List[Integer]()
+
+    this(seed : Integer, bonus : Integer) is
+        this.baseValue := seed
+        this.extra := bonus
+    end
+
+    method Touch(delta : Integer, bonus : Integer) : Integer is
+        var combined : Integer
+        combined := delta.Plus(bonus)
+        this.baseValue := this.baseValue.Plus(combined)
+        this.snapshots.append(this.baseValue)
+        return this.baseValue
+    end
+
+    method Describe : String is
+        this.snapshots.append(this.baseValue)
+        return "mid"
+    end
+
+    method History : List[Integer] => this.snapshots
+end
+
+class FinalGauge extends MidGauge is
+    var flag : Boolean(true)
+
+    this(seed : Integer, bonus : Integer, label : String) is
+        this.baseValue := seed
+        this.extra := bonus
+        this.label := label
+    end
+
+    method Touch : Integer is
+        this.baseValue := this.baseValue.Plus(this.extra)
+        return this.baseValue
+    end
+
+    method Describe : String is
+        this.snapshots.append(this.baseValue)
+        return this.label
+    end
+
+    method FlagStatus : Boolean => this.flag
+end
+
+method Main is
+    var baseGauge : BaseGauge
+    baseGauge := BaseGauge(Integer(2))
+    IO.PrintLine(baseGauge.Touch())
+    IO.PrintLine(baseGauge.Touch(Integer(4)))
+    IO.PrintLine(baseGauge.Describe())
+
+    var midGauge : MidGauge
+    midGauge := MidGauge(Integer(5), Integer(2))
+    IO.PrintLine(midGauge.Touch())
+    IO.PrintLine(midGauge.Touch(Integer(3)))
+    IO.PrintLine(midGauge.Touch(Integer(1), Integer(4)))
+    IO.PrintLine(midGauge.Describe())
+    IO.PrintLine(midGauge.History())
+
+    var finalGauge : FinalGauge
+    finalGauge := FinalGauge(Integer(1), Integer(3), "leaf")
+    IO.PrintLine(finalGauge.Touch())
+    IO.PrintLine(finalGauge.Touch(Integer(2)))
+    IO.PrintLine(finalGauge.Touch(Integer(5), Integer(1)))
+    IO.PrintLine(finalGauge.Describe())
+    IO.PrintLine(finalGauge.History())
+    IO.PrintLine(finalGauge.FlagStatus())
+end

@@ -1,0 +1,26 @@
+method Main is
+    var b : Array[Integer](Integer(2))
+    b[0] := 1
+    b.set(1, 2)
+    var d : Array[Boolean](Integer(2))
+    d[0] := true
+    d.set(1, false)
+    var g : Array[String](Integer(2))
+    g[0] := "foo"
+    g.set(1, "bar")
+    var j : Array[Real](Integer(2))
+    j[0] := 5.55
+    j.set(1, 33.333)
+    var k : Array[Array[Real]](Integer(1))
+    k[0] := j
+    IO.PrintLine(b)
+    IO.PrintLine(d)
+    IO.PrintLine(g)
+    IO.PrintLine(j)
+    IO.PrintLine(k)
+    IO.PrintLine(b.Length())
+    IO.PrintLine(b.Slice(1))
+    IO.PrintLine(g.Slice(0, 1))
+    IO.PrintLine(b.Slice(-1, 1))
+    IO.PrintLine(b.Slice(5))
+end

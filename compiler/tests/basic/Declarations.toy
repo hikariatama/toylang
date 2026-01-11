@@ -1,0 +1,61 @@
+class DeclarationShowcase is
+    var storedInteger : Integer(7)
+    var storedReal : Real(2.25)
+    var storedBoolean : Boolean(true)
+    var storedString : String("seed")
+    var storedArray : Array[Integer](Integer(2))
+    var storedList : List[Boolean](true, false)
+    var storedMap : Map[String, Integer]()
+
+    this() is
+        this.storedArray.set(0, 1)
+        this.storedArray.set(1, 2)
+        this.storedMap.set("seed", 3)
+    end
+
+    method SumAll : Integer is
+        var localTotal : Integer
+        localTotal := this.storedInteger.Plus(this.storedMap.get("seed"))
+        return localTotal.Plus(this.storedArray.Length())
+    end
+
+    method Flip(flag : Boolean) : Boolean is
+        var innerFlag : Boolean
+        innerFlag := flag
+        innerFlag := innerFlag.Not()
+        this.storedBoolean := innerFlag
+        return innerFlag
+    end
+
+    method CurrentBoolean : Boolean => this.storedBoolean
+    method CurrentReal : Real => this.storedReal
+    method CurrentString : String => this.storedString
+    method SnapshotArray : Array[Integer] => this.storedArray
+    method SnapshotList : List[Boolean] => this.storedList
+    method CurrentMapValue : Integer => this.storedMap.get("seed")
+end
+
+method ComposeValue(base : Integer) : Integer is
+    var localInt : Integer(10)
+    var localReal : Real(1.5)
+    return localInt.Plus(base).Plus(localReal.ToInteger())
+end
+
+method Main is
+    IO.PrintLine(ComposeValue(Integer(5)))
+    var showcase : DeclarationShowcase
+    showcase := DeclarationShowcase()
+    IO.PrintLine(showcase.SumAll())
+    IO.PrintLine(showcase.Flip(true))
+    IO.PrintLine(showcase.CurrentBoolean())
+    IO.PrintLine(showcase.CurrentReal())
+    IO.PrintLine(showcase.CurrentString())
+    IO.PrintLine(showcase.SnapshotArray())
+    IO.PrintLine(showcase.SnapshotList())
+    IO.PrintLine(showcase.CurrentMapValue())
+    var mainBool : Boolean
+    mainBool := false
+    IO.PrintLine(mainBool)
+    var mainReal : Real(0.75)
+    IO.PrintLine(mainReal)
+end

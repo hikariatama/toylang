@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: make install
+        shell: bash
+
+      - name: Add PNPM to PATH
+        run: echo "$HOME/.pnpm/bin" >> "$GITHUB_PATH"
+        shell: bash
+
+      - name: Run tests
+        run: make test
+        shell: bash
+
+      - name: Build project
+        run: make build
+        shell: bash

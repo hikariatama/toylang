@@ -1,0 +1,234 @@
+method RenderFrame(A: Real, B: Real) is
+    var screenWidthReal := Screen.Width
+    var screenHeightReal := Screen.Height
+
+    var screenWidth := Integer(screenWidthReal)
+    var screenHeight := Integer(screenHeightReal)
+
+    var thetaSpacing : Real(0.07)
+    var phiSpacing : Real(0.02)
+
+    var R1 : Real(1.0)
+    var R2 : Real(2.0)
+    var K2 : Real(5.0)
+
+    var cosA := Math.Cos(A)
+    var sinA := Math.Sin(A)
+    var cosB := Math.Cos(B)
+    var sinB := Math.Sin(B)
+
+    var pi := Math.Atan2(0, -1)
+
+    var sumR := R1.Plus(R2)
+
+    var minDimReal := screenWidthReal
+    if screenHeightReal.LessThan(minDimReal) then
+        minDimReal := screenHeightReal
+    end
+
+    var numerator := minDimReal.Mult(K2)
+    numerator := numerator.Mult(3.0)
+    var denominator := Real(8.0).Mult(sumR)
+    var K1 := numerator.Div(denominator)
+
+    var output : List[List[String]]()
+    var zbuffer : List[List[Real]]()
+
+    var y := Integer(0)
+    while y.LessThan(screenHeight) loop
+        var rowChars := List[String]()
+        var rowZ := List[Real]()
+        var x := Integer(0)
+        while x.LessThan(screenWidth) loop
+            rowChars.append(" ")
+            rowZ.append(0.0)
+            x := x.Plus(Integer(1))
+        end
+        output.append(rowChars)
+        zbuffer.append(rowZ)
+        y := y.Plus(Integer(1))
+    end
+
+    var twoPi := Real(2.0).Mult(pi)
+
+    var theta : Real
+    theta := 0.0
+
+    var luminanceChars : String
+    luminanceChars := ".,-~:;=!*#$@"
+
+    var halfWidth := screenWidthReal.Div(2.0)
+    var halfHeight := screenHeightReal.Div(2.0)
+
+    IO.Print("\x1b[H")
+
+    while theta.LessThan(twoPi) loop
+        var costheta := Math.Cos(theta)
+        var sintheta := Math.Sin(theta)
+
+        var phi : Real
+        phi := 0.0
+
+        while phi.LessThan(twoPi) loop
+            var cosphi := Math.Cos(phi)
+            var sinphi := Math.Sin(phi)
+
+            var circlex := R1.Mult(costheta)
+            circlex := circlex.Plus(R2)
+            var circley := R1.Mult(sintheta)
+
+            var t1 := cosB.Mult(cosphi)
+            var t2 := sinA.Mult(sinB)
+            t2 := t2.Mult(sinphi)
+            var t3 := t1.Plus(t2)
+            var t4 := circlex.Mult(t3)
+            var t5 := circley.Mult(cosA)
+            t5 := t5.Mult(sinB)
+            var x3d := t4.Minus(t5)
+
+            var u1 := sinB.Mult(cosphi)
+            var u2 := sinA.Mult(cosB)
+            u2 := u2.Mult(sinphi)
+            var u3 := u1.Minus(u2)
+            var u4 := circlex.Mult(u3)
+            var u5 := circley.Mult(cosA)
+            u5 := u5.Mult(cosB)
+            var y3d := u4.Plus(u5)
+
+            var v1 := cosA.Mult(circlex)
+            v1 := v1.Mult(sinphi)
+            var v2 := circley.Mult(sinA)
+            var v3 := K2.Plus(v1)
+            v3 := v3.Plus(v2)
+            var z3d := v3
+
+            if z3d.GreaterThan(0.0) then
+                var ooz := Real(1.0).Div(z3d)
+
+                var tempX := K1.Mult(ooz)
+                tempX := tempX.Mult(x3d)
+                var xpReal := halfWidth.Plus(tempX)
+
+                var tempY := K1.Mult(ooz)
+                tempY := tempY.Mult(y3d)
+                var ypReal := halfHeight.Minus(tempY)
+
+                var xp := Integer(xpReal)
+                var yp := Integer(ypReal)
+
+                var L := cosphi.Mult(costheta)
+                L := L.Mult(sinB)
+
+                var tmpL1 := cosA.Mult(costheta)
+                tmpL1 := tmpL1.Mult(sinphi)
+                L := L.Minus(tmpL1)
+
+                var tmpL2 := sinA.Mult(sintheta)
+                L := L.Minus(tmpL2)
+
+                var tmpL3 := cosA.Mult(sintheta)
+                var tmpL4 := costheta.Mult(sinA)
+                tmpL4 := tmpL4.Mult(sinphi)
+                tmpL3 := tmpL3.Minus(tmpL4)
+                var tmpL5 := cosB.Mult(tmpL3)
+                L := L.Plus(tmpL5)
+
+                if L.GreaterThan(0) then
+                    if xp.GreaterEqual(Integer(0)).And(xp.LessThan(screenWidth)).And(yp.GreaterEqual(Integer(0))).And(yp.LessThan(screenHeight)) then
+                        var rowZ2 := zbuffer.get(yp)
+                        var currentZ := rowZ2.get(xp)
+                        if ooz.GreaterThan(currentZ) then
+                            rowZ2.set(xp, ooz)
+                            zbuffer.set(yp, rowZ2)
+
+                            var lumScale := Real(8.0).Mult(L)
+                            var luminanceIndex := Integer(lumScale)
+                            if luminanceIndex.GreaterEqual(Integer(0)).And(luminanceIndex.LessThan(luminanceChars.Length())) then
+                                var baseCh := luminanceChars.Slice(luminanceIndex, 1)
+
+                                var colorIndexReal := phi.Mult(Real(6.0)).Div(twoPi)
+                                var colorIndex := Integer(colorIndexReal)
+                                if colorIndex.GreaterEqual(Integer(6)) then
+                                    colorIndex := Integer(5)
+                                end
+
+                                var colorCode := ""
+                                if colorIndex.Equal(Integer(0)) then
+                                    colorCode := "\x1b[31m"
+                                end
+                                if colorIndex.Equal(Integer(1)) then
+                                    colorCode := "\x1b[33m"
+                                end
+                                if colorIndex.Equal(Integer(2)) then
+                                    colorCode := "\x1b[32m"
+                                end
+                                if colorIndex.Equal(Integer(3)) then
+                                    colorCode := "\x1b[36m"
+                                end
+                                if colorIndex.Equal(Integer(4)) then
+                                    colorCode := "\x1b[34m"
+                                end
+                                if colorIndex.Equal(Integer(5)) then
+                                    colorCode := "\x1b[35m"
+                                end
+
+                                var ch := colorCode.Concat(baseCh)
+                                ch := ch.Concat("\x1b[0m")
+
+                                var rowChars2 := output.get(yp)
+                                rowChars2.set(xp, ch)
+                                output.set(yp, rowChars2)
+                            end
+                        end
+                    end
+                end
+            end
+
+            phi := phi.Plus(phiSpacing)
+        end
+
+        theta := theta.Plus(thetaSpacing)
+    end
+
+    var j := Integer(0)
+    while j.LessThan(screenHeight) loop
+        var rowChars3 := output.get(j)
+        var line := ""
+        var i := Integer(0)
+        while i.LessThan(screenWidth) loop
+            line := line.Concat(rowChars3.get(i))
+            i := i.Plus(Integer(1))
+        end
+        IO.PrintLine(line)
+        j := j.Plus(Integer(1))
+    end
+end
+
+method Main is
+    var A : Real(1.0)
+    var B : Real(1.0)
+    var twoPi : Real
+    twoPi := Real(2.0).Mult(Math.Atan2(0, -1))
+    var before : Real
+
+    while Boolean(true) loop
+        before := Time.PerfCounter()
+        RenderFrame(A, B)
+        A := A.Plus(0.07)
+        B := B.Plus(0.03)
+
+        if A.GreaterEqual(twoPi) then
+            A := A.Minus(twoPi)
+        end
+        if B.GreaterEqual(twoPi) then
+            B := B.Minus(twoPi)
+        end
+
+        var frameTime := Time.PerfCounter().Minus(before)
+        var targetFrameTime := Real(1.0).Div(Real(30.0))
+        if frameTime.LessThan(targetFrameTime) then
+            var sleepTime := targetFrameTime.Minus(frameTime)
+            Time.Sleep(sleepTime)
+        end
+    end
+end

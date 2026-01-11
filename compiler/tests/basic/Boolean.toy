@@ -1,0 +1,22 @@
+method Main is
+    var a : Boolean
+    a := true
+    IO.PrintLine(a)
+    a := false
+    IO.PrintLine(a)
+    IO.PrintLine(a.Equal(true))
+    IO.PrintLine(a.NotEqual(true))
+    IO.PrintLine(a.Not().Not().Not().Not().Not().Not().Not().Not().Not().Not().Not())
+    var b : Boolean(true)
+    var c : Boolean(false)
+    IO.PrintLine(b.And(c))
+    IO.PrintLine(b.And(true))
+    IO.PrintLine(c.Or(b))
+    IO.PrintLine(c.Or(false))
+    IO.PrintLine(b.Xor(c))
+    IO.PrintLine(b.Xor(true))
+    IO.PrintLine(c.ToBoolean())
+    IO.PrintLine(b.ToBoolean())
+    IO.PrintLine(b.ToInteger())
+    IO.PrintLine(c.ToInteger())
+end

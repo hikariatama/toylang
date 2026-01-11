@@ -1,0 +1,65 @@
+class Counter is
+    var startValue : Integer(0)
+    var total : Integer(0)
+
+    this(initial : Integer) is
+        this.startValue := initial
+        this.total := initial
+    end
+
+    method Increment(amount : Integer) : Integer is
+        this.total := this.total.Plus(amount)
+        return this.total
+    end
+
+    method Reset : Integer is
+        this.total := this.startValue
+        return this.total
+    end
+
+    method Current : Integer => this.total
+end
+
+class FancyCounter extends Counter is
+    var bonus : Integer(1)
+    var history : List[Integer]()
+
+    this(initial : Integer, bonus : Integer) is
+        this.startValue := initial
+        this.total := initial
+        this.bonus := bonus
+    end
+
+    method SetBonus(amount : Integer) is
+        this.bonus := amount
+    end
+
+    method Increment(amount : Integer) : Integer is
+        var boosted : Integer
+        boosted := amount.Plus(this.bonus)
+        this.history.append(this.total)
+        this.total := this.total.Plus(boosted)
+        return this.total
+    end
+
+    method History : List[Integer] => this.history
+end
+
+method Main is
+    var baseCounter : Counter
+    baseCounter := Counter(Integer(5))
+    IO.PrintLine(baseCounter.Increment(Integer(2)))
+    IO.PrintLine(baseCounter.Increment(Integer(3)))
+    IO.PrintLine(baseCounter.Reset())
+    IO.PrintLine(baseCounter.Current())
+
+    var fancy : FancyCounter
+    fancy := FancyCounter(Integer(10), Integer(2))
+    IO.PrintLine(fancy.Increment(Integer(1)))
+    fancy.SetBonus(Integer(3))
+    IO.PrintLine(fancy.Increment(Integer(2)))
+    IO.PrintLine(fancy.Reset())
+    IO.PrintLine(fancy.Increment(Integer(0)))
+    IO.PrintLine(fancy.History())
+    IO.PrintLine(baseCounter.Current().Plus(fancy.Current()))
+end

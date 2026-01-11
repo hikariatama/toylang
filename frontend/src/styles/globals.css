@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-title: var(--font-major-mono-display), monospace;
+}
+
+:root {
+  --ansi-black: #000000;
+  --ansi-red: #ff0000;
+  --ansi-green: #00ff00;
+  --ansi-yellow: #ffff00;
+  --ansi-blue: #0000ff;
+  --ansi-magenta: #ff00ff;
+  --ansi-cyan: #00ffff;
+  --ansi-white: #ffffff;
+  --ansi-black: #000000;
+  --ansi-red: #ff0000;
+  --ansi-green: #00ff00;
+  --ansi-yellow: #ffff00;
+  --ansi-blue: #0000ff;
+  --ansi-magenta: #ff00ff;
+  --ansi-cyan: #00ffff;
+  --ansi-white: #ffffff;
+  --ansi-bright-black: #555555;
+  --ansi-bright-red: #ff5555;
+  --ansi-bright-green: #55ff55;
+  --ansi-bright-yellow: #ffff55;
+  --ansi-bright-blue: #5555ff;
+  --ansi-bright-magenta: #ff55ff;
+  --ansi-bright-cyan: #55ffff;
+  --ansi-bright-white: #ffffff;
+  --ansi-bright-black: #555555;
+  --ansi-bright-red: #ff5555;
+  --ansi-bright-green: #55ff55;
+  --ansi-bright-yellow: #ffff55;
+  --ansi-bright-blue: #5555ff;
+  --ansi-bright-magenta: #ff55ff;
+  --ansi-bright-cyan: #55ffff;
+  --ansi-bright-white: #ffffff;
+}
+
+.highlighted-fragment {
+  display: inline;
+  position: relative;
+}
+.highlighted-fragment:before {
+  content: "";
+  background-color: rgba(99, 102, 241, 0.5);
+  border-radius: 4px;
+  display: block;
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  transition:
+    outline-color 80ms ease-in-out,
+    box-shadow 80ms ease-in-out,
+    background-color 80ms ease-in-out;
+}
+.highlighted-line {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+}
+.highlighted-line:before {
+  content: "";
+  background-color: rgba(99, 102, 241, 0.5);
+  border-radius: 4px;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transition:
+    outline-color 80ms ease-in-out,
+    box-shadow 80ms ease-in-out,
+    background-color 80ms ease-in-out;
+}
+.diag-line {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+.diag-line:before {
+  content: "";
+  display: inline-block;
+  left: -6px;
+  right: -6px;
+  margin-left: -6px;
+  bottom: 0;
+  top: 0;
+  position: absolute;
+  z-index: -1;
+  border-radius: 2px;
+}
+.error-line:before {
+  background-color: oklch(63.7% 0.237 25.331 / 0.1);
+}
+.warning-line:before {
+  background-color: oklch(79.5% 0.184 86.047 / 0.1);
+}
+.tok-keyword {
+  color: #c792ea;
+}
+.tok-type {
+  color: #82aaff;
+}
+.tok-builtin {
+  color: #7fdbca;
+}
+.tok-identifier {
+  color: #d4d4d4;
+}
+.tok-number {
+  color: #f78c6c;
+}
+.tok-string {
+  color: #ecc48d;
+}
+.tok-comment {
+  color: #637777;
+  font-style: italic;
+}
+.tok-operator {
+  color: #f07178;
+}
+.tok-punctuation {
+  color: #8996a3;
+}
+#line-numbers:before {
+  font-family: monospace;
+  padding-top: 10px;
+  content: attr(data-content);
+  position: absolute;
+  white-space: pre;
+  padding-right: 4px;
+  padding-left: 16px;
+  text-align: right;
+  opacity: 1;
+  padding-top: 16px;
+  line-height: 24px;
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+.braille-loader:after {
+  @apply font-mono text-4xl text-white;
+  content: "⠋";
+  animation: braille-spin 0.5s steps(1) infinite;
+}
+
+@keyframes braille-spin {
+  0% {
+    content: "⠋";
+  }
+  10% {
+    content: "⠙";
+  }
+  20% {
+    content: "⠹";
+  }
+  30% {
+    content: "⠸";
+  }
+  40% {
+    content: "⠼";
+  }
+  50% {
+    content: "⠴";
+  }
+  60% {
+    content: "⠦";
+  }
+  70% {
+    content: "⠧";
+  }
+  80% {
+    content: "⠇";
+  }
+  90% {
+    content: "⠏";
+  }
+}

@@ -1,0 +1,120 @@
+class Base is
+    method Inc(x: Integer) : Integer => x.Mult(Integer(52))
+    method ConstThree : Integer => Integer(1).Plus(Integer(2))
+end
+
+class وريث extends Base is
+    method Inc(x: Integer) : Integer => x.Plus(Integer(1))
+    method MakeSureItDidNotPruneThisMethod : Integer is
+        IO.PrintLine("If you see this message, it's good...")
+        return Integer(0)
+    end
+    method ConstFourteen : Integer is
+        var neužitečný    :       Integer   ( this.MakeSureItDidNotPruneThisMethod()   )
+        var    a     :      Integer (   0  )
+        a  :=   Integer    (    2    )        // 123
+                            .Plus
+                            (     Integer(   3  )   )
+        /////  ////  /////
+        if    Boolean (   true ) then a := a.Mult(Integer(2)) else a := Integer(0) end
+        if    Boolean   (false   ) then a := Integer(999) end
+        while Boolean(false).Or(Boolean(true)).And(Boolean(true).Not()) loop a := a.Plus(Integer(100)) end
+        var r : Real(0.0)
+        r := Integer(2).Mult(Real(3.0))
+        var 役に立たない : Integer(5)
+        var res : Integer(0)
+        res := this.Inc(a)
+        res := res.Plus(this.ConstThree())
+        return res
+    end
+end
+
+class Arrays is
+    method ArrayOps is
+        var matrix : List[List[Array[Integer]]]()
+        var layer1 : List[Array[Integer]]()
+        var row1 : Array[Integer](Integer(2))
+        row1.set(0, Integer(7))
+        row1.set(1, Integer(11))
+        layer1.append(row1)
+        matrix.append(layer1)
+        IO.PrintLine(matrix)
+    end
+end
+
+class Loops is
+    method Fib(n : Integer) : Integer is
+        var r : List[Integer](0, 1)
+        var a : Integer(0)
+        var b : Integer(1)
+        var i : Integer(0)
+        while i.LessThan(n) loop
+            var temp : Integer
+            temp := a.Plus(b)
+            r.append(temp)
+            a := b
+            b := temp
+            i := i.Plus(Integer(1))
+        end
+        IO.PrintLine(r)
+        return a
+    end
+end
+
+class VerboseList[T] is
+    var _items : List[T]()
+
+    method append(item : T) is
+        this._items.append(item)
+        IO.Print("Appended ")
+        IO.PrintLine(item)
+    end
+end
+
+method Main is
+    var arrs : Arrays
+    arrs := Arrays()
+    arrs.ArrayOps()
+
+    var verb : VerboseList[Integer]
+    verb := VerboseList[Integer]()
+    verb.append(Integer(42))
+    verb.append(Integer(7))
+
+    var in : Integer
+    IO.PrintLine("Type the عدد صحيح (integer): ")
+    in := IO.ReadInteger()
+    var inReal : Real
+    IO.PrintLine("Type the رقم حقيقي (real number): ")
+    inReal := IO.ReadReal()
+    var inBoolean : Boolean
+    IO.PrintLine("Type the 布尔值 (boolean - true/false): ")
+    inBoolean := IO.ReadBool()
+    IO.PrintLine("You typed:")
+    IO.Print(in)
+    IO.Print(", ")
+    IO.Print(inReal)
+    IO.Print(", ")
+    IO.Print(inBoolean)
+    IO.PrintLine()
+    var out : Array[Integer](Integer(5))
+    out.set(0, Integer(inReal))
+    var der : وريث
+    der := وريث()
+    out.set(1, der.ConstFourteen())
+    var midd : Integer
+    midd := out.get(0).Mult(out.get(1))
+    out.set(2, midd)
+    out.set(3, out.get(1).Mult(out.get(2)))
+    out.set(4, out.get(2).Mult(out.get(3)))
+    IO.Print("Something: ")
+    IO.PrintLine(out)
+
+    var looper : Loops
+    looper := Loops()
+    var fibResult : Integer
+    fibResult := looper.Fib(in)
+    IO.Print(in)
+    IO.Print("th Fibonacci number is ")
+    IO.PrintLine(fibResult)
+end

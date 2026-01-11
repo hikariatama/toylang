@@ -1,0 +1,12 @@
+.git
+.gitignore
+.DS_Store
+**/bin
+**/obj
+compiler/bin
+compiler/obj
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/.turbo
+frontend/tsconfig.tsbuildinfo

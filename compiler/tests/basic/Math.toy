@@ -1,0 +1,17 @@
+method Main is
+    IO.PrintLine(Math.Cos(0.0))
+    IO.PrintLine(Math.Sin(0.0))
+    IO.PrintLine(Math.Tan(0.0))
+    IO.PrintLine(Math.Cos(3.141592653589793))
+    IO.PrintLine(Math.Sin(1.5707963267948966))
+    IO.PrintLine(Math.Atan2(0.0, -1.0))
+    IO.PrintLine(Math.Pow(2.0, 10.0))
+    IO.PrintLine(Math.Sqrt(9.0))
+    IO.PrintLine(Math.Log(Math.Exp(2.0)))
+    IO.PrintLine(Math.Acos(1.0))
+    IO.PrintLine(Math.Asin(0.0))
+    IO.PrintLine(Math.Atan(1.0))
+    var a : Real
+    a := Math.Random()
+    IO.PrintLine(a.GreaterEqual(0.0).And(a.LessThan(1.0)))
+end

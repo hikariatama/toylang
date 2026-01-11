@@ -1,0 +1,54 @@
+class CollectionVault is
+    var ids : Array[Integer](Integer(2))
+    var flags : List[Boolean]()
+    var bucket : Map[String, List[Integer]]()
+
+    this(first : Integer, second : Integer) is
+        this.ids.set(0, first)
+        this.ids.set(1, second)
+        this.flags.append(true)
+        var starter : List[Integer](first)
+        this.bucket.set("initial", starter)
+    end
+
+    method AddFlag(value : Boolean) : List[Boolean] is
+        this.flags.append(value)
+        return this.flags
+    end
+
+    method UpdateId(index : Integer, value : Integer) : Array[Integer] is
+        this.ids.set(index, value)
+        return this.ids
+    end
+
+    method PushToBucket(key : String, amount : Integer) : List[Integer] is
+        var series : List[Integer]
+        series := this.bucket.get(key)
+        series.append(amount)
+        return series
+    end
+
+    method CreateBucket(key : String, seed : Integer) : Map[String, List[Integer]] is
+        var newSeries : List[Integer](seed)
+        this.bucket.set(key, newSeries)
+        return this.bucket
+    end
+
+    method SnapshotIds : Array[Integer] => this.ids
+    method SnapshotFlags : List[Boolean] => this.flags
+    method SnapshotBucket : Map[String, List[Integer]] => this.bucket
+end
+
+method Main is
+    var vault : CollectionVault
+    vault := CollectionVault(Integer(3), Integer(7))
+    IO.PrintLine(vault.SnapshotIds())
+    IO.PrintLine(vault.SnapshotFlags())
+    IO.PrintLine(vault.SnapshotBucket().get("initial"))
+    IO.PrintLine(vault.AddFlag(false))
+    IO.PrintLine(vault.UpdateId(Integer(1), Integer(9)))
+    IO.PrintLine(vault.PushToBucket("initial", Integer(10)))
+    IO.PrintLine(vault.CreateBucket("extra", Integer(5)).Contains("extra"))
+    IO.PrintLine(vault.PushToBucket("extra", Integer(8)))
+    IO.PrintLine(vault.SnapshotBucket().get("extra"))
+end
